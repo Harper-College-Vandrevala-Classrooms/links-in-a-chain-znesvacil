@@ -23,37 +23,58 @@ class ChainLink {
       }
 };
 
-class Node {
-private:
+struct Node {
+
     ChainLink *link;
     Node *next;
-
-public:
-    Node(ChainLink &data)
+    
+    Node(ChainLink *data)
     {
-        this->link = &data;
+        this->link = data;
         this->next = nullptr;
+    }
+    
+    Node(ChainLink *data, Node *previous_node)
+    {
+        this->link = data;
+        this->next = nullptr;
+        if (previous_node) {
+            previous_node->next = this; 
+        }
     }
     
     string data()
     {
         return this->link->get_color();
     }
+    
+    
 };
+
+void printList (Node* n) {
+    
+    while (n!=nullptr) {
+        cout << n->link->get_color() << ", ";
+        n = n->next;
+}
+}
 
 int main() {
     ChainLink link_one = ChainLink("red");
-    Node* NodeOne = new Node(link_one);
+    Node* head = new Node(&link_one);
     
     ChainLink link_two = ChainLink("green");
-    Node* NodeTwo = new Node(link_two);
+    Node* second_node = new Node(&link_two, head);
     
     ChainLink link_three = ChainLink("blue");
-    Node* NodeThree = new Node(link_three);
+    Node* third_node = new Node(&link_three, second_node);
     
-    cout << NodeOne->data() << endl;
-    cout << NodeTwo->data() << endl;
-    cout << NodeThree->data() << endl;
+    cout << head->data() << endl;
+    cout << second_node->data() << endl;
+    cout << third_node->data() << endl;
+    
+    cout << endl;
+    printList(head);
     
     return 0;
 }
